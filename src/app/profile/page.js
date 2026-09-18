@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import AuthGuard from "../components/AuthGuard";
 
 export default function ProfilePage() {
   const [name, setName] = useState("John Doe");
@@ -44,6 +45,8 @@ export default function ProfilePage() {
   };
 
   return (
+    <AuthGuard>  
+    
     <main className="min-h-screen bg-gray-50 px-6 py-10">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
@@ -219,6 +222,8 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-    </main>
+      </main>
+      
+      </AuthGuard>
   );
 }

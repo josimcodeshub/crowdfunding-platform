@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import AuthGuard from "../components/AuthGuard";
 
 const campaigns = [
   {
@@ -43,6 +44,8 @@ export default function DashboardPage() {
   );
 
   return (
+
+    <AuthGuard> 
     <main className="min-h-screen bg-gray-50 px-6 py-10">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
@@ -275,6 +278,8 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </main>
+      </main>
+       </AuthGuard>
+
   );
 }

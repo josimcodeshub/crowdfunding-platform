@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,26 +21,13 @@ export default function RegisterPage() {
     setSuccess("");
     setError("");
 
-    // Name validation
     if (!name.trim()) {
-      setError("Please enter your full name.");
+      setError("Please enter your name.");
       return;
     }
 
-    // Email validation
     if (!email.trim()) {
-      setError("Please enter your email address.");
-      return;
-    }
-
-    if (!email.includes("@")) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    // Password validation
-    if (!password) {
-      setError("Please enter a password.");
+      setError("Please enter your email.");
       return;
     }
 
@@ -46,17 +36,28 @@ export default function RegisterPage() {
       return;
     }
 
-    // Start loading
     setLoading(true);
 
-    // Temporary frontend-only registration
     setTimeout(() => {
+      // Temporary frontend-only user
+      const user = {
+        name: name.trim(),
+        email: email.trim(),
+        password,
+      };
+
+      localStorage.setItem("fundflow_user", JSON.stringify(user));
+
       setLoading(false);
       setSuccess("Account created successfully!");
 
       setName("");
       setEmail("");
       setPassword("");
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 1000);
     }, 1500);
   };
 
@@ -64,36 +65,29 @@ export default function RegisterPage() {
     <main className="min-h-screen bg-gray-50 px-6 py-16">
       <div className="mx-auto max-w-md">
         <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-
-          {/* Header */}
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900">
-              Create an Account
+              Create Account
             </h1>
 
             <p className="mt-2 text-gray-600">
-              Join FundFlow and start supporting great ideas.
+              Join FundFlow and start making an impact.
             </p>
           </div>
 
-          {/* Success Message */}
           {success && (
             <div className="mt-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-center text-sm font-medium text-green-700">
               {success}
             </div>
           )}
 
-          {/* Error Message */}
           {error && (
             <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-700">
               {error}
             </div>
           )}
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-
-            {/* Name */}
             <div>
               <label
                 htmlFor="name"
@@ -104,16 +98,14 @@ export default function RegisterPage() {
 
               <input
                 id="name"
-                name="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your full name"
+                placeholder="Enter your name"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
             </div>
 
-            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -124,7 +116,6 @@ export default function RegisterPage() {
 
               <input
                 id="email"
-                name="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -133,7 +124,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -144,7 +134,6 @@ export default function RegisterPage() {
 
               <input
                 id="password"
-                name="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -153,7 +142,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
@@ -163,7 +151,6 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          {/* Login */}
           <p className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{" "}
             <Link
@@ -173,7 +160,6 @@ export default function RegisterPage() {
               Login
             </Link>
           </p>
-
         </div>
       </div>
     </main>

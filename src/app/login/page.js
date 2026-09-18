@@ -20,21 +20,42 @@ export default function LoginPage() {
     setSuccess("");
     setError("");
 
-    if (!email || !password) {
+    if (!email.trim() || !password) {
       setError("Please enter your email and password.");
+      return;
+    }
+
+    // Get registered user from localStorage
+    const savedUser = localStorage.getItem("fundflow_user");
+
+    if (!savedUser) {
+      setError("No account found. Please create an account first.");
+      return;
+    }
+
+    const user = JSON.parse(savedUser);
+
+    // Check email
+    if (user.email !== email.trim()) {
+      setError("Invalid email or password.");
+      return;
+    }
+
+    // Check password
+    if (user.password !== password) {
+      setError("Invalid email or password.");
       return;
     }
 
     setLoading(true);
 
-    // Temporary frontend-only login
     setTimeout(() => {
+      // Save login status
       localStorage.setItem("fundflow_logged_in", "true");
 
       setLoading(false);
       setSuccess("Login successful!");
 
-      // Redirect to dashboard
       setTimeout(() => {
         router.push("/dashboard");
       }, 800);
@@ -45,7 +66,6 @@ export default function LoginPage() {
     <main className="min-h-screen bg-gray-50 px-6 py-16">
       <div className="mx-auto max-w-md">
         <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-          {/* Header */}
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900">
               Welcome Back
@@ -56,23 +76,19 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Success Message */}
           {success && (
             <div className="mt-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-center text-sm font-medium text-green-700">
               {success}
             </div>
           )}
 
-          {/* Error Message */}
           {error && (
             <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-700">
               {error}
             </div>
           )}
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -92,7 +108,6 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -112,7 +127,6 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -122,7 +136,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Register */}
           <p className="mt-6 text-center text-sm text-gray-600">
             Don't have an account?{" "}
             <Link

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import AuthGuard from "../components/AuthGuard";
 
 export default function CreateCampaignPage() {
   const router = useRouter();
@@ -70,6 +71,8 @@ export default function CreateCampaignPage() {
   };
 
   return (
+
+    <AuthGuard> 
     <main className="min-h-screen bg-gray-50 px-6 py-12">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
@@ -244,6 +247,7 @@ export default function CreateCampaignPage() {
           </form>
         </div>
       </div>
-    </main>
+      </main>
+       </AuthGuard>
   );
 }
